@@ -306,7 +306,6 @@ st.markdown("""
 # ─────────────────────────────────────────────
 #  UPLOAD SECTION
 # ─────────────────────────────────────────────
-st.markdown('<p class="section-label">Unggah Gambar Kemasan</p>', unsafe_allow_html=True)
 
 with st.container():
     st.markdown('<div class="upload-card">', unsafe_allow_html=True)
