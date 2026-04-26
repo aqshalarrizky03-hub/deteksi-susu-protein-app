@@ -326,7 +326,7 @@ if uploaded_file:
     text, kategori, score, gray, thresh = process_image(image)
 
     # Save to DB
-    save_data(uploaded_file.name, text, kategori)
+    save_data(uploaded_file.name, text, kategori, image, score)
 
     # ── Layout: Image | Results ──
     col_img, col_res = st.columns([1, 1.6], gap="large")
