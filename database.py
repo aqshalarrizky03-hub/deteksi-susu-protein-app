@@ -1,29 +1,25 @@
-import mysql.connector
+import sqlite3
 
-# koneksi ke MySQL XAMPP
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",  # default XAMPP kosong
-    database="protein_db"
-)
-
+conn = sqlite3.connect("protein.db", check_same_thread=False)
 cursor = conn.cursor()
 
-# =====================
-# SIMPAN DATA
-# =====================
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS hasil (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nama_file TEXT,
+    teks TEXT,
+    kategori TEXT,
+    waktu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+''')
+
 def save_data(nama_file, teks, kategori):
-    query = """
-    INSERT INTO hasil_klasifikasi (nama_file, teks_ocr, kategori)
-    VALUES (%s, %s, %s)
-    """
-    cursor.execute(query, (nama_file, teks, kategori))
+    cursor.execute(
+        "INSERT INTO hasil (nama_file, teks, kategori) VALUES (?, ?, ?)",
+        (nama_file, teks, kategori)
+    )
     conn.commit()
 
-# =====================
-# AMBIL DATA
-# =====================
 def get_data():
-    cursor.execute("SELECT * FROM hasil_klasifikasi ORDER BY waktu DESC")
+    cursor.execute("SELECT * FROM hasil ORDER BY waktu DESC")
     return cursor.fetchall()
