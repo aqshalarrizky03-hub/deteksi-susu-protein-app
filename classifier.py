@@ -49,4 +49,5 @@ def process_image(pil_img):
     text = pytesseract.image_to_string(thresh)
     kategori, score = classify_protein(text)
 
-    return text, kategori, score, gray, thresh
+   total_score = sum(score.values())
+return text, kategori, total_score, gray, thresh
