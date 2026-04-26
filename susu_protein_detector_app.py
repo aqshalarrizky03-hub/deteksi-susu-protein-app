@@ -1,24 +1,21 @@
 import streamlit as st
-import tempfile
 from classifier import process_image
 from database import save_data, get_data
-import cv2
-import matplotlib.pyplot as plt
+from PIL import Image
 
 st.title("Klasifikasi Susu Protein (OCR + Rule-Based)")
 
 uploaded_file = st.file_uploader("Upload Gambar", type=["jpg","png","jpeg"])
 
 if uploaded_file:
-    # simpan sementara
-    tfile = tempfile.NamedTemporaryFile(delete=False)
-    tfile.write(uploaded_file.read())
+    # baca gambar
+    image = Image.open(uploaded_file).convert("RGB")
 
     # tampilkan gambar
-    st.image(uploaded_file, caption="Gambar Input", use_column_width=True)
+    st.image(image, caption="Gambar Input", use_column_width=True)
 
     # proses
-    text, kategori, score, gray, thresh = process_image(tfile.name)
+    text, kategori, score, gray, thresh = process_image(image)
 
     # simpan ke DB
     save_data(uploaded_file.name, text, kategori)
@@ -33,18 +30,18 @@ if uploaded_file:
     st.subheader("Score")
     st.write(score)
 
-    # tampilkan preprocessing
+    # preprocessing
     st.subheader("Preprocessing")
     col1, col2 = st.columns(2)
 
     with col1:
-        st.image(gray, caption="Grayscale")
+        st.image(gray, caption="Grayscale", channels="GRAY")
 
     with col2:
-        st.image(thresh, caption="Threshold")
+        st.image(thresh, caption="Threshold", channels="GRAY")
 
 # =====================
-# RIWAYAT DATA
+# RIWAYAT
 # =====================
 st.subheader("Riwayat Klasifikasi")
 
