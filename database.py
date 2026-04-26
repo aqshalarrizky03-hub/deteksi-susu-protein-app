@@ -1,25 +1,19 @@
-import sqlite3
+from supabase import create_client
+import streamlit as st
 
-conn = sqlite3.connect("protein.db", check_same_thread=False)
-cursor = conn.cursor()
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS hasil (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nama_file TEXT,
-    teks TEXT,
-    kategori TEXT,
-    waktu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
-''')
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def save_data(nama_file, teks, kategori):
-    cursor.execute(
-        "INSERT INTO hasil (nama_file, teks, kategori) VALUES (?, ?, ?)",
-        (nama_file, teks, kategori)
-    )
-    conn.commit()
+    data = {
+        "nama_file": nama_file,
+        "teks": teks,
+        "kategori": kategori
+    }
+    supabase.table("hasil").insert(data).execute()
 
 def get_data():
-    cursor.execute("SELECT * FROM hasil ORDER BY waktu DESC")
-    return cursor.fetchall()
+    response = supabase.table("hasil").select("*").execute()
+    return response.data
