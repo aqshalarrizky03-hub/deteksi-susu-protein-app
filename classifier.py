@@ -50,4 +50,4 @@ def process_image(pil_img):
     kategori, score = classify_protein(text)
 
    total_score = sum(score.values())
-return text, kategori, total_score, gray, thresh
+   return text, kategori, total_score, gray, thresh
