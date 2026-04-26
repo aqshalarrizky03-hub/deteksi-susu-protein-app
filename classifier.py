@@ -1,6 +1,7 @@
 import cv2
 import pytesseract
 import re
+from PIL import Image
 
 keywords = {
     "whey": ["whey", "whey isolate", "whey concentrate", "whey protein"],
@@ -30,7 +31,16 @@ def classify_protein(text):
     return result, score
 
 def process_image(image_path):
-    img = cv2.imread(image_path)
+    # baca pakai PIL (AMAN)
+    pil_img = Image.open(image_path).convert("RGB")
+
+    # convert ke OpenCV format
+    img = np.array(pil_img)
+
+    # ubah RGB → BGR (OpenCV default)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+    # lanjut preprocessing
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     median = cv2.medianBlur(gray, 3)
     thresh = cv2.threshold(median, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
