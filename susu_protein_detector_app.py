@@ -48,7 +48,7 @@ st.subheader("Riwayat Klasifikasi")
 data = get_data()
 
 for row in data:
-    st.write(f"File: {row[1]}")
-    st.write(f"Kategori: {row[3]}")
-    st.write(f"Waktu: {row[4]}")
+    st.write(f"File: {row['nama_file']}")
+    st.write(f"Kategori: {row['kategori']}")
+    st.write(f"Waktu: {row['waktu']}")
     st.write("---")
