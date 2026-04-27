@@ -12,20 +12,21 @@ supabase = create_client(url, key)
 # =========================
 # SAVE DATA
 # =========================
-def save_data(nama_file, teks_ocr, kategori, image=None, score=0):
-    img_b64 = None
+def save_data(nama_file, text, kategori, image, score):
+
+    image_b64 = ""
 
     if image:
-        buf = io.BytesIO()
-        image.save(buf, format="JPEG")
-        img_b64 = base64.b64encode(buf.getvalue()).decode()
+        buffer = io.BytesIO()
+        image.save(buffer, format="JPEG")
+        image_b64 = base64.b64encode(buffer.getvalue()).decode()
 
     data = {
         "nama_file": nama_file,
-        "teks_ocr": teks_ocr if teks_ocr else "Tidak terdeteksi",
+        "teks_ocr": text if text else "Tidak terdeteksi",
         "kategori": kategori if kategori else "Tidak diketahui",
         "score": int(score) if score else 0,
-        "image": image_b64 if image else ""
+        "image": image_b64
     }
 
     supabase.table("hasil").insert(data).execute()
