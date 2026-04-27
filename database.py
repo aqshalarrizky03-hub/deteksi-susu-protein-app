@@ -22,10 +22,10 @@ def save_data(nama_file, teks_ocr, kategori, image=None, score=0):
 
     data = {
         "nama_file": nama_file,
-        "teks_ocr": teks_ocr,
-        "kategori": kategori,
-        "score": score,
-        "image": img_b64
+        "teks_ocr": text if text else "Tidak terdeteksi",
+        "kategori": kategori if kategori else "Tidak diketahui",
+        "score": int(score) if score else 0,
+        "image": image_b64 if image else ""
     }
 
     supabase.table("hasil").insert(data).execute()
